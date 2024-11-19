@@ -8,6 +8,8 @@ jobs:
     outputs:
       output1: ${{ steps.step1 }}
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
       - name: Read README.md
         id: read
         uses: juliangruber/read-file-action@v1
