@@ -3,11 +3,21 @@ on:
   - push
 jobs:
   dire_bonjour:
+    container:
+      image: ghcr.io/cicd-lectures/gitpod:latest
+      env:
+        NODE_ENV: development
+      ports:
+        - 80
+      volumes:
+        - my_docker_volume:/volume_mount
+      options: --cpus 1 --user=root
     runs-on: ubuntu-22.04
     steps:
+      - name: Check for dockerenv file
+        run: (ls /.dockerenv && echo Found dockerenv) || (echo No dockerenv)
       - uses: actions/checkout@v4 # Récupère le contenu du dépôt correspondant au commit du workflow en cours
       - run: sudo apt-get install cowsay
       - run: ls -l # Liste les fichier du répertoire courant
       - run: cat README.md | cowsay # Affiche le contenu du fichier `README.md` à la base du dépôt
-      
       
