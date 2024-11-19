@@ -3,21 +3,27 @@ on:
   - push
 jobs:
   dire_bonjour:
-    container:
-      image: ghcr.io/cicd-lectures/gitpod:latest
-      env:
-        NODE_ENV: development
-      ports:
-        - 80
-      volumes:
-        - my_docker_volume:/volume_mount
-      options: --cpus 1 --user=root
     runs-on: ubuntu-22.04
+
+    outputs:
+      output1: ${{ steps.step1 }}
     steps:
-      - name: Check for dockerenv file
-        run: (ls /.dockerenv && echo Found dockerenv) || (echo No dockerenv)
-      - uses: actions/checkout@v4 # Récupère le contenu du dépôt correspondant au commit du workflow en cours
-      - run: sudo apt-get install cowsay
-      - run: ls -l # Liste les fichier du répertoire courant
-      - run: cat README.md | cowsay # Affiche le contenu du fichier `README.md` à la base du dépôt
-      
+      - name: Read README.md
+        id: read
+        uses: juliangruber/read-file-action@v1
+        with:
+          path: ./README.md
+      - id: step1
+        run: echo steps.read >> $GITHUB_OUTPUT
+
+      - name: output pipeline
+        id: cowsay_output_id # You want id
+        uses: Code-Hex/neo-cowsay-action@v1
+        with:
+          message: ${{ steps.step1 }}
+          cow: 'gopher' # ascii art list: https://github.com/Code-Hex/Neo-cowsay/tree/master/cows
+          cowsay_to_output: 'cowsay'
+        
+      - name: print output
+        run: |
+          echo "${{ steps.cowsay_output_id.outputs.cowsay }}"
