@@ -3,11 +3,10 @@ on:
   - push
 jobs:
   ci:
-    dire_bonjour:
-      runs-on: ubuntu-22.04
-      steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20.17.0
-      - run: npm run build
+    runs-on: ubuntu-22.04
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 20.17.0
+    - run: npm run build
