@@ -1,3 +1,4 @@
+import { parse } from 'path';
 import { VehicleStore } from '../store/vehicle';
 import { Request, Response } from 'express';
 
@@ -9,7 +10,10 @@ export class DeleteVehicleController {
   constructor(private readonly vehicleStore: VehicleStore) {}
 
   public async handle(req: Request<Parameters>, res: Response): Promise<void> {
-    res.status(500).send();
+    const vehicles = await this.vehicleStore.deleteVehicle({
+      id: parseInt(req.params.id)
+    });
+    res.status(204).send();
   }
 }
 
